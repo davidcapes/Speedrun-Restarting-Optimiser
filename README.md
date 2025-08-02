@@ -154,15 +154,8 @@ If you use this framework in your research, please cite:
 }
 ```
 
-## License
-
-This project is licensed under <your_license>.
-
 ## Contact
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/speedrun-optimization/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/speedrun-optimization/discussions)
-- **Email**: your.email@example.com
+- **Email**: davidmcapes@gmail.com
 
 ---
 
