@@ -1,24 +1,26 @@
 # Plots Directory
 
-This directory contains generated visualizations from the scripts throughout the codebase.
+This directory contains generated visualisations from script(s) throughout the codebase.
 
 ## Directory Structure
 
 ```
 plots/
-└── task_distributions/   # Individual task probability distributions
-    └── task*_pdf.png     # Task * probability density function
-
+└── task_distributions/
+    ├── task1_pdf.png
+    ├── task2_pdf.png 
+    ├── task3_pdf.png 
+    ├── task4_pdf.png 
+    ├── task5_pdf.png 
+    └── task6_pdf.png 
 ```
 
-## Plot Types
+## Task Distribution Plots
 
-### Task Distribution Plots (`task_distributions/`)
-
-#### **Features:**
+### Plot Features
 - **PDF curve**: Probability density function
 - **Legend**: Relevant distribution statistics (mean, variance, std, median, iqr, mode)
-- **Color Coding**: Each plot uses a separate distinct color for its graph.
+- **Colour Coding**: Each plot uses a separate distinct color for its graph.
 
-#### **Generation:**
-Located in `src/preset_distributions/task_distribution_plotter.py`:
+### Code Usage
+Located at `src/preset_distributions/distribution_plotter.py`.

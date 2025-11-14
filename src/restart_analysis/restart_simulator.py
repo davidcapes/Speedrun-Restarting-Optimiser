@@ -1,3 +1,5 @@
+import os
+import sys
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures.process import BrokenProcessPool
@@ -121,7 +123,16 @@ def game_simulator(sampler_function, r_vector, n_simulations, goal_time=None, pa
 # TODO: Strategy-based simulator
 
 if __name__ == "__main__":
-    from src.preset_distributions.example_case import W, sample_task
+
+    # Load relevant files.
+    REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.insert(0, REPO_DIR)
+    try:
+        from src.preset_distributions.example_case import W, sample_task
+    finally:
+        if sys.path[0] == REPO_DIR:
+            sys.path.pop(0)
+
     n_simulations = 1000000
     r_vector = np.array([16.55, 26.63, 46.99, 60.3, 71.86, 75])
     mn, std = game_simulator(sample_task, r_vector, n_simulations, parallel=False, goal_time=W)

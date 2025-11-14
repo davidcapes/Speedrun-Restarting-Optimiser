@@ -2,13 +2,11 @@
 
 This module provides tools for processing real speedrun data, including the construction of task distribution estimates.  
 
-## **File Descriptions**
 
-### **1. Data Simulation**
-#### `create_from_example`
+## `create_from_example`
 Generates synthetic speedrun data using predefined distributions and game structure. 
 
-For example:
+### Example Usage
 ```json
 {
   "1": {
@@ -22,8 +20,7 @@ For example:
 }
 ```
 
-### **2. Graph Processing**
-#### `scan_json`
+## `scan_json`
 Reads the player or simulated JSON file and:
 - Topologically sorts the game graph.
 - Builds an **adjacency matrix** representation of the DAG.
@@ -35,7 +32,7 @@ Reads the player or simulated JSON file and:
 
 ---
 
-## **Example Usage**
+### Example Usage
 ```python
 from src.speedrun_data_processor.graph_processor import create_from_example, scan_json
 from src.speedrun_data_processor.distribution_estimator import kde_method

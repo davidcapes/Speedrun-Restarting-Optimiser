@@ -1,24 +1,28 @@
-# **Preset Distributions**
+# Preset Distributions
 
-This module defines custom probability distributions for a synthetic speedrun game, including their PDFs, CDFs, and random samplers. It also provides utilities for visualization and summary metrics of tasks.
+This module defines custom probability distributions for a synthetic speedrun game, including their PDFs, CDFs, and samplers. It also provides utilities for visualization and summary metrics of these distributions.
 
----
-
-## **Overview**
+## Overview
 - **Example Distributions** (`example_case.py`): Implements six task distributions with associated PDFs, CDFs, and optimized random samplers.
 - **Visualization Utilities** (`distribution_plotter.py`): Functions to compute statistical metrics and generate legend-annotated plots.
 
----
+## File Description: `example_case.py`
 
-## **File Descriptions**
+### Constants:
+- `W = 75` (goal run time)
+- `N = 6` (number of tasks/distributions)
 
-### **1. `example_case.py`**
-Defines a set of **six distributions** with:
-- **PDF functions** (`PDFS` tuple)
-- **CDF functions** (`CDFS` tuple)
-- **Random samplers** (`SAMPLERS` tuple, Numba-optimized)
+### Key Functions:
+- **`pdf_task(i)`**
+  Returns the `i`th PDF function.
 
-#### **Task Distributions**
+- **`cdf_task(i)`** 
+  Returns the `i`th CDF function.
+
+- **`sample_task(i)`**: 
+  Samples from the `i`th distribution using Numba-accelerated samplers.
+
+### Task Distributions
 | Task | Distribution      | Parameters                              | Mean   | Variance |
 |------|-------------------|-----------------------------------------|--------|----------|
 | 1    | Truncated Normal  | μ=19, σ²=70, x≥0                        | ~20.7  | ~65.2    |
@@ -28,26 +32,11 @@ Defines a set of **six distributions** with:
 | 5    | Truncated Mixture | μ₁=25, σ₁²=50, μ₂=13, σ₂²=130, x≥0      | ~19.0  | ~155.5   |
 | 6    | Triangular        | a=0, c=15, b=45                         | 20.0   | 75.0     |
 
-**Goal**: Complete all tasks with total time < 75.
+The goal is to complete all tasks with total time < 75.
 
-#### **Key Functions**:
-- `pdf_task(i)` → Returns the `i`th PDF function.
-- `cdf_task(i)` → Returns the `i`th CDF function.
-- `sample_task(i)` → Samples from the `i`th distribution using Numba-accelerated samplers.
+## File Description: `distribution_plotter.py`
 
-#### ** Constants**:
-- `W = 75` (goal run time)
-- `N = 6` (number of tasks/distributions)
-
-#### **Features**:
-- Numba-optimized samplers for fast sampling.
-- Diversely-shaped distribution.
-
----
-
-### **2. `distribution_plotter.py`**
-
-#### **Key Functions**:
+### Key Functions:
 - **`get_bounds(cdf, portion_lwr=0, portion_upr=1)`**  
   Computes lower and upper bounds for a given CDF and probability range.
 - **`get_distribution_metrics(pdf, cdf, x_min, x_max)`**  
@@ -55,13 +44,7 @@ Defines a set of **six distributions** with:
 - **`plot_pdfs(pdfs, cdfs)`**  
   Plots PDFs for multiple distributions and includes summary stats in legends.
 
-#### **Features**
-- Visualization tools for PDFs and metrics with Matplotlib.
-- Statistical summaries: mean, variance, std, median, IQR, and mode.
-
----
-
-## **Example Usage**
+### Example Usage
 ```python
 from src.preset_distributions.distribution_plotter import get_bounds, get_distribution_metrics, plot_pdfs
 from src.preset_distributions.example_case import PDFS, CDFS, sample_task

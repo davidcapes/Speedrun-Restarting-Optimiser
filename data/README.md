@@ -1,25 +1,26 @@
 # Data Directory
 
-This directory contains all data files used by the Speedrun Optimization Framework.
+This directory contains all data files produced by the code.
 
 ## Directory Structure
 
 ```
 data/
-├── game_sessions/           # Game simulator session recordings
-│   ├── raw/                 # Raw CSV files from game sessions
+├── game_sessions/
+│   ├── raw/
 │   │   └── game_data_*.csv
-│   └── annotated/           # Game session data labelled by participant number
+│   └── annotated/
 │       └── participant*.csv
-└── speedrun_data/           # Real speedrunner's data for anaysis
-    └── example_data.json    # Example data used for testing
+└── speedrun_data/
+    ├── example_data.json
+    └── *.json
 ```
 
-## Data Formats
+## Game Session Data
+Raw and annotated session files are saved in `game_sessions/raw/` or `game_sessions/anotated/`.
 
-### Game Session Data (CSV)
-Raw and annotated session files are saved in `game_sessions/raw/` and `game_sessions/anotated/` with the following format:
 
+### Format (CSV)
 ```csv
 task_number,task_score,restarted_mid_task
 1,15.234567,0
@@ -29,18 +30,24 @@ task_number,task_score,restarted_mid_task
 ...
 ```
 
-**Columns:**
+### Columns
 - `task_number`: Which task was attempted (int)
 - `task_score`: Time taken for the task (float)
 - `restarted_mid_task`: Whether the task was interrupted by a restart (0/1)
 
-**File naming:**
+### File naming
 - Raw: `game_data_{username}_{timestamp}.csv`
 - Annotated: `participant{number}.csv`
 
-### Speedrun Data (JSON)
-Data from real speedrunners `speedrun_data/`:
+### Code Usage
+Located at `src/game_simulator/game.py`:
 
+## Speedrun Data
+Typically for data from real speedruns saved in `speedrun_data/`. 
+
+Also contains the file `example_data.json`, which provides synthetic data of the provided format for testing purposes.
+
+### Format (JSON)
 ```json
 {
     "1": {
@@ -53,5 +60,3 @@ Data from real speedrunners `speedrun_data/`:
   ...
 }
 ```
-
-The file `example_data.json` provides synthetic data of the provided format that can be used for testing scripts.

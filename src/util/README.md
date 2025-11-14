@@ -1,33 +1,27 @@
 # Utilities
-This module provides general utility functions for statistical and numerical operations.
 
----
+This module provides general utility functions for statistical and numerical operations. These functions are all JIT-compiled for improved performance and compatibility.
 
-## Functions
+## File Description: `math_support.py`
 
-### Truncated Normal Distribution
+### Key Functions
+
+#### Truncated Normal Distribution
 - **`trunc_normal_pdf(x, mu, sigma, lwr=-np.inf, upr=np.inf)`**  
   Probability density function (PDF) for a truncated normal distribution.
 
 - **`trunc_normal_cdf(x, mu, sigma, lwr=-np.inf, upr=np.inf)`**  
   Cumulative distribution function (CDF) for a truncated normal distribution.
 
-### Numerical Integration
+#### Numerical Integration
 - **`cumulative_trapezoid(y_array, x_array)`**  
   Cumulative trapezoidal integration, Numba-compatible.
 
-### Statistical Utilities
+#### Statistical Utilities
 - **`sample_std(array, ddof=1)`**  
   Sample standard deviation (default `ddof=1`).
 
----
-
-## Features
-- Numba JIT-compiled for performance and compatibility.
-- Support for infinite bound for truncation.
----
-
-## Example
+### Example Usage
 ```python
 import numpy as np
 from src.util.math_support import trunc_normal_pdf, trunc_normal_cdf, cumulative_trapezoid, sample_std

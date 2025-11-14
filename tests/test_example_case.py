@@ -1,7 +1,18 @@
+import os
+import sys
 import unittest
+
 import numpy as np
 
-from src.preset_distributions.example_case import PDFS, CDFS, SAMPLERS, sample_task, W
+# Import test functions.
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+sys.path.insert(0, parent_dir)
+try:
+    from src.preset_distributions.example_case import PDFS, CDFS, SAMPLERS, sample_task, W
+finally:
+    if sys.path[0] == parent_dir:
+        sys.path.pop(0)
 
 
 class TestExampleCase(unittest.TestCase):

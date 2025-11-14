@@ -1,0 +1,18 @@
+# VSCode settings
+.vscode/
+
+# Python Virtual Environments
+venv/
+.venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# General
+*.log
+
+# Backup Files
+backups/

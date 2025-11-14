@@ -1,17 +1,22 @@
-"""
-Unit tests to ensure agreement between the solver and simulator.
-This test suite will catch any discrepancies between analytical calculations
-and simulation results to prevent embarrassing disagreements during demonstrations.
-"""
+import os
+import sys
+import unittest
 
 import numpy as np
-import unittest
 from scipy.stats import t, uniform, expon
 from numba import njit
 
-from src.restart_analysis.restart_solver import create_probability_tables, get_expected_time_linear, get_restarts, get_restarts_gd
-from src.restart_analysis.restart_simulator import game_simulator
-from src.preset_distributions.example_case import PDFS, sample_task, W, N
+# Import test functions.
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+sys.path.insert(0, parent_dir)
+try:
+    from src.restart_analysis.restart_solver import create_probability_tables, get_expected_time_linear, get_restarts, get_restarts_gd
+    from src.restart_analysis.restart_simulator import game_simulator
+    from src.preset_distributions.example_case import PDFS, sample_task, W, N
+finally:
+    if sys.path[0] == parent_dir:
+        sys.path.pop(0)
 
 
 class TestSolverSimulatorAgreement(unittest.TestCase):

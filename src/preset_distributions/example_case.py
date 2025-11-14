@@ -73,4 +73,3 @@ def sample_task(i):
 # Constants.
 W = 75
 N = 6
-

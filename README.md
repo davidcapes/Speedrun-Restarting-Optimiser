@@ -1,32 +1,16 @@
-# Speedrun Restarting Optimization Framework
+# Speedrun Restart Optimisation
 
 ## Overview
 
-This project implements a framework for optimizing speedrun restarting strategies in multi-task speedrunning scenarios, where players can choose to restart their runs at any time. The aim is to devise a restarting strategy that minimizes the expected time to beat some goal run time.
+This project implements a framework for optimising speedrun restarting strategies, where players can choose to restart their runs at any time. The aim is to devise a restarting strategy that minimises the expected time to beat some goal run time.
 
 ## Features
 
-- **🎮 Interactive Game** (`src/game_simulator/game.py`): Pygame-based interface for simulating speedrun mechanics
-- **🔬 Dynamic Programming Solver** (`src/restart_analysis/restart_solver.py`): Mathematical restart threshold calculation
-- **📊 Monte Carlo Simulator** (`src/restart_analysis/restart_simulator.py`): Validate restarting strategies through statistical simulation
-- **📉 Visualization Suite** (`src/preset_distributions/distribution_plotter.py`): Generate plots of distributions, performance metrics, and optimization results
-- **📈 Data Analysis Tools** (`src/game_simulator/game_data_analyzer.py` & `src/speedrun_data_processor/`): Analyze player performance and estimate empirical thresholds
-
-## Installation
-
-### Requirements
-- Python 3.7+
-- NumPy
-- SciPy  
-- Matplotlib
-- Pygame
-- Numba (for JIT compilation)
-- Pandas
-- NetworkX
-
-```bash
-pip install -r requirements.txt
-```
+- **🎮 Interactive Game**: Pygame-based interface for simulating speedrun mechanics
+- **🔬 Dynamic Programming Solver**: Mathematical restart threshold calculation
+- **📊 Monte Carlo Simulator**: Validate restarting strategies through statistical simulation
+- **📉 Visualization Suite**: Generate plots of distributions, performance metrics, and optimization results
+- **🔍 Data Analysis Tools**: Analyze player performance and estimate empirical thresholds
 
 ## Project Structure
 
@@ -58,105 +42,43 @@ speedrun-optimization/
     └── task_distributions/           # Plots of tasks PDFs
 ```
 
-## Quick Start
+## Requirements
 
-### 1. Play the Interactive Game
-Experience the speedrun restart mechanics firsthand:
+Python version 3.12.10 (or equivalent) is required to run the scripts in this project.
+
+### Packages
+- NumPy
+- SciPy
+- MatPlotLib
+- PyGame
+- Pandas
+- Numba
+- NetworkX
+
+### Installation
 ```bash
-python src/game_simulator/game.py
+pip install -r requirements.txt
 ```
 
-#### **Player Actions**:
+## Game Simulation
+
+See `docs/Game_Information.pdf` for more details about the game simulator.
+
+### Description
+
 - **Left Click** → Attempt the next task.
 - **Right Click** → Restart from the first task.
 
 **Goal:** Complete all tasks with total time < 75, as efficiently as possible.
 
-### 2. Find Optimal Strategy
-Calculate mathematically optimal restart thresholds:
+### Running the Game
+Navigate to the project root, and run the following in command line:
 
-```python
-from src.restart_analysis.restart_solver import create_probability_tables, get_expected_time_linear, get_restarts
-from src.preset_distributions.example_case import PDFS, W
-
-# Create probability tables
-pdf_tables, cdf_tables = create_probability_tables(
-    PDFS, bin_count=2000, x_min=0, x_max=W
-)
-
-# Find optimal restart thresholds
-optimal_thresholds = get_restarts(pdf_tables, W)
-print("Optimal restart thresholds:", optimal_thresholds)
-
-# Calculate expected time.
-expected_time = get_expected_time_linear(pdf_tables, optimal_thresholds)
-print("Expected time:", expected_time)
+```bash
+python src/game_simulator/game.py
 ```
 
-### 3. Run Simulations
-Validate strategies through Monte Carlo simulation:
-
-```python
-from src.restart_analysis.restart_simulator import game_simulator
-from src.preset_distributions.example_case import sample_task, W
-
-# Test a strategy
-r_vector = [25, 35, 45, 55, 65, W]
-results = game_simulator(
-    sample_task, r_vector, goal_time=W, n_simulations=10000
-)
-
-print(f"Expected time: {results.mean_time:.2f}")
-print(f"Success rate: {results.success_rate:.2%}")
-```
-
-### 4. Visualize Results
-Create plots of task distributions:
-```python
-from src.preset_distributions.distribution_plotter import plot_pdfs
-from src.preset_distributions.example_case import PDFS, CDFS
-
-plot_pdfs(PDFS, CDFS, save_directory='plots/')
-```
-
-## Speedrun Data Format
-```json
-{
-  "<task_name>": {
-    "Completed": [<float>, ...],   
-    "Restarted": [<float>, ...], 
-    "Reachable": ["<task_name2>", ...],
-    "Start": false,              
-    "End": false  
-  },
-  ...
-}
-```
-
-## Analysis Pipeline
- 1. Load real speedrun data
- 2. Estimate probability density functions (PDFs) for task times
- 3. Compute optimized restart thresholds
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-## Citation
-
-If you use this framework in your research, please cite:
-```bibtex
-@software{speedrun_optimization,
-  title = {Speedrun Optimization Framework},
-  author = {Your Name},
-  year = {2025},
-  url = {https://github.com/yourusername/speedrun-optimization}
-}
-```
-
-## Contact
+## Author Contact
 - **Email**: davidmcapes@gmail.com
-
----
-
-**Happy Speedrunning! 🎮🏃‍♂️💨**
+- **GitHub**: https://github.com/davidcapes
+- **LinkedIn**: https://www.linkedin.com/in/david-capes-/

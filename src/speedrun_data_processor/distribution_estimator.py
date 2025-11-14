@@ -1,8 +1,18 @@
+import os
+import sys
+
 import numpy as np
 from numba import njit, prange
 from scipy.optimize import minimize
 
-from src.util.math_support import trunc_normal_pdf, trunc_normal_cdf, sample_std, cumulative_trapezoid
+# Load relevant files.
+REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, REPO_DIR)
+try:
+    from src.util.math_support import trunc_normal_pdf, trunc_normal_cdf, sample_std, cumulative_trapezoid
+finally:
+    if sys.path[0] == REPO_DIR:
+        sys.path.pop(0)
 
 
 @njit(parallel=True)

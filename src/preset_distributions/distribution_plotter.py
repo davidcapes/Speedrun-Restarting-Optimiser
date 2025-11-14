@@ -1,3 +1,6 @@
+import os
+import sys
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import bisect
@@ -89,7 +92,15 @@ def plot_pdfs(pdfs, cdfs, save_directory='plots/', colors=('blue', 'green', 'red
 
 
 if __name__ == "__main__":
-    from src.preset_distributions.example_case import PDFS, CDFS
+
+    # Load relevant files.
+    REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.insert(0, REPO_DIR)
+    try:
+        from src.preset_distributions.example_case import PDFS, CDFS
+    finally:
+        if sys.path[0] == REPO_DIR:
+            sys.path.pop(0)
 
     print(get_bounds(CDFS[0]))
     plot_pdfs(PDFS, CDFS)

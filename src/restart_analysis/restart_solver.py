@@ -1,3 +1,5 @@
+import os
+import sys
 from math import floor, ceil, log
 
 import numpy as np
@@ -372,7 +374,13 @@ def get_expected_time_graph(pdf_tables, r_vector, graph_array=None, epsilon=10**
 
 
 if __name__ == "__main__":
-    from src.preset_distributions.example_case import PDFS, W
+    REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.insert(0, REPO_DIR)
+    try:
+        from src.preset_distributions.example_case import W, PDFS
+    finally:
+        if sys.path[0] == REPO_DIR:
+            sys.path.pop(0)
 
     bin_count = 2000
     pdf_tables, cdf_tables = create_probability_tables(PDFS, bin_count, 0, W)

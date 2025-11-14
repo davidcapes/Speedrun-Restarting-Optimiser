@@ -1,10 +1,19 @@
+import os
+import sys
 import json
 
 import networkx as nx
 import numpy as np
 from numba import njit
 
-from src.preset_distributions.example_case import sample_task, N
+# Load relevant files.
+REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, REPO_DIR)
+try:
+    from preset_distributions.example_case import sample_task, N
+finally:
+    if sys.path[0] == REPO_DIR:
+        sys.path.pop(0)
 
 
 def create_from_example(sampler=sample_task, n=N, file_name="../speedrun_data/example_data.json", simulation_count=100,

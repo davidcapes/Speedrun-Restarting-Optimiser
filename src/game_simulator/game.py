@@ -1,11 +1,21 @@
+import os
+import sys
 import time
 import re
 
 import numpy as np
 import pygame
 
-from src.preset_distributions.example_case import sample_task, N
-from src.preset_distributions.example_case import W as goal_score
+# Load relevant files.
+REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, REPO_DIR)
+try:
+    from src.preset_distributions.example_case import sample_task, N
+    from src.preset_distributions.example_case import W as goal_score
+finally:
+    if sys.path[0] == REPO_DIR:
+        sys.path.pop(0)
+
 
 # Initialize Pygame.
 pygame.init()
@@ -20,7 +30,7 @@ game_speed = int(requested_game_speed) if requested_game_speed.isdigit() and int
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Restarting Game")
-pygame.display.set_icon(pygame.image.load('../../assets/images/game_icon.png'))
+pygame.display.set_icon(pygame.image.load(os.path.join(REPO_DIR, "assets/images/game_icon.png")))
 font = pygame.font.Font(None, 36)
 
 # Colors.
@@ -28,18 +38,18 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 LIGHT_GRAY = (200, 200, 200)
 TASK_COLORS = (
-    (0, 0, 255),  # Blue
-    (0, 255, 0),  # Green
-    (255, 0, 0),  # Red
-    (255, 215, 0),  # Gold
-    (0, 255, 255),  # Cyan
+    (0, 0, 255),   # Blue
+    (0, 255, 0),   # Green
+    (255, 0, 0),   # Red
+    (255, 215, 0), # Gold
+    (0, 255, 255), # Cyan
     (128, 0, 128)  # Purple
 )
 BACKGROUND_COLOUR = (30, 0, 25) # What also looks good is (0, 28, 7)
 
 # Sounds.
 pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
-sounds = {i + 1: pygame.mixer.Sound(f"../audio/task{i + 1}.mp3") for i in range(N)}
+sounds = {i + 1: pygame.mixer.Sound(os.path.join(REPO_DIR, f"assets/audio/task{i + 1}.mp3")) for i in range(N)}
 
 # Game State Parameters.
 current_task = 1
@@ -98,7 +108,7 @@ def draw_task_squares():
 
 
 def save_data():
-    filename = f"../game_simulator_data/raw/game_data_{username}_{time.time()}.csv"
+    filename = os.path.join(REPO_DIR, f"data/game_simulator_data/raw/game_data_{username}_{time.time()}.csv")
     np.savetxt(filename, score_data, delimiter=',', header="task_number,task_score,restarted_mid_task",
                fmt=('%d', '%.10f', '%d'), comments='')
     print(f"Data saved to {filename}")

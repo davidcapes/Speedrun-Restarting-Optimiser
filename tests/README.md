@@ -1,16 +1,16 @@
 # Test Suite
 
-Comprehensive test suite for the Speedrun Optimization Framework.
+Test suite for the Speedrun Optimisation Framework.
 
 ## Running Tests
 
 ### Running all tests
 ```bash
-python -m unittest discover -s Perfect/tests -p "test_*.py"  
+python -m unittest discover -s tests -p "test_*.py"  
 ```
 ### Running specific tests
 ```bash
-python -m unittest discover -s Perfect/tests -p "test_example_case.py"  
+python -m unittest discover -s tests -p "test_example_case.py"  
 ```
 
 ## Writing Tests
@@ -29,12 +29,10 @@ class TestProjectStructure(unittest.TestCase):
     """Example unit tests for functions in <module>."""
 
     def test_function1(self):
-        # TODO: Replace with real assertions
-        pass
+        ...
 
     def test_function2(self):
-        # TODO: Replace with real assertions
-        pass
+        ...
 
 if __name__ == "__main__":
     unittest.main()

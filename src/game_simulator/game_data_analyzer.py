@@ -9,6 +9,9 @@
 # TODO: For a KDE Table, calculate average absolute and square distance between actual pdf and kde estimate only for
 #  values BELOW the player's estimated restart threshold.
 
+import os
+import sys
+
 import numpy as np
 import pandas as pd
 
@@ -67,10 +70,18 @@ def estimate_restart_thresholds(files, n):
 
 
 if __name__ == "__main__":
-    from src.preset_distributions.example_case import W, SAMPLERS
+
+    REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.insert(0, REPO_DIR)
+    try:
+        from src.preset_distributions.example_case import W, SAMPLERS
+    finally:
+        if sys.path[0] == REPO_DIR:
+            sys.path.pop(0)
+
     N = len(SAMPLERS)
 
-    files = ["../game_simulator_data/raw/game_data_test_user1_1751644777.2417738.csv"]
+    files = [os.path.join(REPO_DIR, "data/game_simulator_data/raw/game_data_test_user1_1751644777.2417738.csv")]
     print(_clean_raw_data(files, N))
     print(get_empirical_expected_time(files, N, W))
     print(estimate_restart_thresholds(files, N))
