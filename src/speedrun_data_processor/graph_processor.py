@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+from typing import Callable
 
 import networkx as nx
 import numpy as np
@@ -10,14 +11,20 @@ from numba import njit
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO_DIR)
 try:
-    from preset_distributions.example_case import sample_task, N
+    from src.preset_distributions.example_case import sample_task, N
 finally:
     if sys.path[0] == REPO_DIR:
         sys.path.pop(0)
 
 
-def create_from_example(sampler=sample_task, n=N, file_name="../speedrun_data/example_data.json", simulation_count=100,
-                        seed=42):
+def create_from_example(
+    sampler: Callable[[int], float] = sample_task, 
+    n: int = N, 
+    file_name: str = os.path.join(REPO_DIR, "data", "speedrun_data", "example_data.json"),
+    simulation_count: int = 100,
+    seed: int = 42
+) -> dict:
+
     np.random.seed(seed)
     njit(np.random.seed(seed))
 
@@ -40,10 +47,14 @@ def create_from_example(sampler=sample_task, n=N, file_name="../speedrun_data/ex
     return result_file
 
 # topologic sort the graph.
-def scan_json(file_name="../speedrun_data/example_data.json"):
+def scan_json(
+    file_directory: str = os.path.join(REPO_DIR, "data", "speedrun_data", "example_data.json")
+) -> tuple[np.ndarray, dict[str, int]]:
+    """
+    """
 
     # Load file.
-    with open(file_name, "r") as f:
+    with open(file_directory, "r") as f:
         data = json.load(f)
     n = len(data)
 

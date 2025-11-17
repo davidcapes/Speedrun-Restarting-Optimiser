@@ -120,11 +120,10 @@ def game_simulator(sampler_function, r_vector, n_simulations, goal_time=None, pa
             pass
     return _game_simulator_default(sampler_function, r_vector, goal_time, n_simulations)
 
-# TODO: Strategy-based simulator
 
 if __name__ == "__main__":
 
-    # Load relevant files.
+    # Load example case.
     REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     sys.path.insert(0, REPO_DIR)
     try:
@@ -133,8 +132,9 @@ if __name__ == "__main__":
         if sys.path[0] == REPO_DIR:
             sys.path.pop(0)
 
+    # Test restart threshold.
     n_simulations = 1000000
     r_vector = np.array([16.55, 26.63, 46.99, 60.3, 71.86, 75])
     mn, std = game_simulator(sample_task, r_vector, n_simulations, parallel=False, goal_time=W)
-    print(mn, std)
+    print(mn)
 

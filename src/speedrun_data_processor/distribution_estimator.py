@@ -4,6 +4,7 @@ import sys
 import numpy as np
 from numba import njit, prange
 from scipy.optimize import minimize
+import matplotlib.pyplot as plt
 
 # Load relevant files.
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -16,32 +17,32 @@ finally:
 
 
 @njit(parallel=True)
-def kde_method(D1, D2, bins=1000, x_lwr=0, x_upr=75):
+def kde_method(
+    D1: np.ndarray, 
+    D2: np.ndarray, 
+    bins: int, 
+    x_lwr: float, 
+    x_upr: float
+) -> tuple[np.ndarray, np.ndarray]:
     """
-    Calculates PDF and CDF tables for the Random Variable with the following PDF.
+    Calculates emperical PDF and CDF tables for the inputted data.
 
     This function implements a modified kernel density estimation that accounts for
-    right-censored observations in the data, where we know that the true
-    value is greater than the observed value in D2. It uses truncated normal distributions
-    as kernels and applies Silverman's rule for bandwidth selection.
+    right-censored observations in the data, where the true value is greater than 
+    the observed value in D2. It uses truncated normal distributions as kernels and 
+    applies Silverman's rule for bandwidth selection.
 
-    :param D1: Primary dataset used for kernel density estimation
-    :type D1: numpy.ndarray[float]
-    :param D2: Secondary dataset representing right-censored observations
-    :type D2: numpy.ndarray[float]
+    :param D1: Dataset of observed values
+    :param D2: Dataset of right-censored observed values
     :param bins: Number of bins for the output PDF and CDF tables
-    :type bins: int
     :param x_lwr: Lower bound of the x-axis range for density estimation
-    :type x_lwr: float
     :param x_upr: Upper bound of the x-axis range for density estimation
-    :type x_upr: float
     :return: A tuple containing PDF and CDF tables
-    :rtype: tuple[numpy.ndarray[float], numpy.ndarray[float]]
 
     Mathematical formulation:
     • fₜₙ(x) = φ(x) / (1 − Φ(0)) - Truncated normal PDF
     • Fₜₙ(x) = (Φ(x) − Φ(0)) / (1 − Φ(0)) - Truncated normal CDF
-    • h = s×⁻⁵√(3n₁/4) - Silverman's bandwidth rule where s is unbiased std
+    • h = s × ⁻⁵√(3n₁/4) - Silverman's bandwidth rule
     • f(x) = (1 + Σ_{d₂ ∈ D₂} 𝟏(x > d₂)/Σ_{d₁ ∈ D₁} (1 − Fₜₙ((d₂−d₁)/h)) ) × Σ_{d₁ ∈ D₁} (fₜₙ((x−d₁)/h))/h) / (n₁ + n₂)
     """
 
@@ -58,13 +59,14 @@ def kde_method(D1, D2, bins=1000, x_lwr=0, x_upr=75):
     cdf_table = cumulative_trapezoid(pdf_table, x_values)
 
     # Re-scale based on restarts.
-    for i in prange(len(x_values)):
-        x = x_values[i]
-        multiplier = len(D1)
-        for d2 in D2:
+    for d2 in D2:
+        cdf_value = np.interp(d2, xp=x_values, fp=cdf_table)
+        for i in prange(len(x_values)):
+            x = x_values[i]
+            multiplier = len(D1)
             if x > d2:
-                multiplier += 1/(1 - np.interp(d2, xp=x_values, fp=cdf_table))
-        pdf_table[i] *= multiplier
+                multiplier += 1/(1 - cdf_value)
+            pdf_table[i] *= multiplier
     pdf_table /= len(D1) + len(D2)
     cdf_table = cumulative_trapezoid(pdf_table, x_values)
 
@@ -116,7 +118,6 @@ def gmm_method(D1, D2, bins, x_lwr=0, x_upr=75, m=5, iterations=1, seed=42):
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
 
     D1 = np.array([19, 21, 22, 8, 16, 17, 18, 12])
     D2 = np.array([23, 24, 19, 23])

@@ -26,13 +26,13 @@ def create_probability_tables(pdf_functions, bin_count, x_min, x_max, calc_bin_s
     :rtype: tuple[np.ndarray[np.float64], np.ndarray[np.float64]]
     """
 
-    # Initialize.
+    # Initialize tables.
     n = len(pdf_functions)
     bin_width = (x_max - x_min) / bin_count
     pdf_tables = np.zeros((n, bin_count + 1), dtype=np.float64)
     cdf_tables = np.zeros((n, bin_count + 1), dtype=np.float64)
 
-    # Fill Tables.
+    # Fill tables.
     for k, f in enumerate(pdf_functions):
         pdf_tables[k][0] = f(x_min)
         cdf_tables[k][0] = 0.0
@@ -40,6 +40,7 @@ def create_probability_tables(pdf_functions, bin_count, x_min, x_max, calc_bin_s
         for j in range(1, bin_count + 1):
             pdf_tables[k][j] = f(x_min + j * bin_width)
 
+            # Extra CDF precision.
             cdf_tables[k][j] = cdf_tables[k][j - 1]
             cdf_tables[k][j] += (pdf_tables[k][j] + pdf_tables[k][j - 1]) / 2
             for h in range(1, calc_bin_split + 1):
@@ -374,6 +375,8 @@ def get_expected_time_graph(pdf_tables, r_vector, graph_array=None, epsilon=10**
 
 
 if __name__ == "__main__":
+    
+    # Load example case.
     REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     sys.path.insert(0, REPO_DIR)
     try:
@@ -382,13 +385,22 @@ if __name__ == "__main__":
         if sys.path[0] == REPO_DIR:
             sys.path.pop(0)
 
+    # Test inputted restart thresholds
+    bin_count = 10000
+    pdf_tables, cdf_tables = create_probability_tables(PDFS, bin_count, 0, W)
+    r_vector = np.array([16.55, 26.63, 46.99, 60.3, 71.86, 75])
+    print("Expected Time (inputted):", get_expected_time_linear(pdf_tables, r_vector))
+
+    # Find best restart threshholds.
     bin_count = 2000
     pdf_tables, cdf_tables = create_probability_tables(PDFS, bin_count, 0, W)
-
-    #r_vector = get_r_gd(pdf_tables, W)
-    #print("R-Vector (gradient descent):", r_vector)
-    #print("Expected Time (gradient descent):", get_expected_time_linear(pdf_tables, r_vector))
-
     r_vector = get_restarts(pdf_tables, W)
+    print("R-Vector (pattern search):", r_vector)
+    print("Expected Time (pattern search):", get_expected_time_linear(pdf_tables, r_vector))
+
+    # Find best restart threshholds.
+    bin_count = 2000
+    pdf_tables, cdf_tables = create_probability_tables(PDFS, bin_count, 0, W)
+    r_vector = get_restarts_gd(pdf_tables, W)
     print("R-Vector (gradient descent):", r_vector)
     print("Expected Time (gradient descent):", get_expected_time_linear(pdf_tables, r_vector))

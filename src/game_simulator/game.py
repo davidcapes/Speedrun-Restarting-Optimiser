@@ -3,6 +3,7 @@ import sys
 import time
 import re
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
 import numpy as np
 import pygame
 
@@ -21,7 +22,6 @@ finally:
 pygame.init()
 
 # Game Parameters.
-np.random.seed(941029)
 username = re.sub(r'[^a-zA-Z0-9]', '_', input("Enter Username: "))
 requested_game_speed = input("Enter Game Speed (default 3): ")
 game_speed = int(requested_game_speed) if requested_game_speed.isdigit() and int(requested_game_speed) > 0 else 3
@@ -30,7 +30,7 @@ game_speed = int(requested_game_speed) if requested_game_speed.isdigit() and int
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Restarting Game")
-pygame.display.set_icon(pygame.image.load(os.path.join(REPO_DIR, "assets/images/game_icon.png")))
+pygame.display.set_icon(pygame.image.load(os.path.join(REPO_DIR, "assets", "images", "game_icon.png")))
 font = pygame.font.Font(None, 36)
 
 # Colors.
@@ -49,7 +49,7 @@ BACKGROUND_COLOUR = (30, 0, 25) # What also looks good is (0, 28, 7)
 
 # Sounds.
 pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
-sounds = {i + 1: pygame.mixer.Sound(os.path.join(REPO_DIR, f"assets/audio/task{i + 1}.mp3")) for i in range(N)}
+sounds = {i + 1: pygame.mixer.Sound(os.path.join(REPO_DIR, "assets", "audio", f"task{i + 1}.mp3")) for i in range(N)}
 
 # Game State Parameters.
 current_task = 1
@@ -108,10 +108,12 @@ def draw_task_squares():
 
 
 def save_data():
-    filename = os.path.join(REPO_DIR, f"data/game_simulator_data/raw/game_data_{username}_{time.time()}.csv")
-    np.savetxt(filename, score_data, delimiter=',', header="task_number,task_score,restarted_mid_task",
+    file_folder = os.path.join(REPO_DIR, "data", "game_simulator_data", "raw")
+    os.makedirs(file_folder, exist_ok=True)
+    file_directory = os.path.join(file_folder, f"game_data_{username}_{time.time()}.csv")
+    np.savetxt(file_directory, score_data, delimiter=',', header="task_number,task_score,restarted_mid_task",
                fmt=('%d', '%.10f', '%d'), comments='')
-    print(f"Data saved to {filename}")
+    print(f"Data saved to {file_directory}")
 
 
 def play_game():
